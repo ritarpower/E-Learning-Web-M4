@@ -13,8 +13,6 @@ import java.util.Optional;
 
 @Service
 public class CartServiceImpl implements CartService {
-    @Autowired
-    private ICartRepository cartRepository;
 
     @Autowired
     private IUsersRepository usersRepository;
@@ -23,74 +21,49 @@ public class CartServiceImpl implements CartService {
     private ICoursesRepository coursesRepository;
 
     @Autowired
-    private IEnrollments enrollmentsRepository;
+    private ICartRepository cartRepository;
+
+    @Autowired
+    private ICartItemRepository cartItemRepository;
 
     @Override
-    public Cart getActiveCart(Long userId) {
-        return cartRepository.findByUserUserIdAndStatus(userId, "ACTIVE")
-                .orElseGet(() -> createCart(userId));
-    }
+    public void addCourseToCart(Long userId, Long courseId) {
+        Users user = usersRepository.findById(userId).get();
+        Courses course = coursesRepository.findById(courseId).get();
+        Cart cart = user.getCart();
+        if (cart == null) {
+            cart = new Cart();
+            cart.setUser(user);
+            cartRepository.save(cart);
+            user.setCart(cart);
+        }
 
-    @Override
-    public Cart createCart(Long userId) {
-        Users user = usersRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng!"));
+        boolean alreadyExists = cart.getItems().stream()
+                .anyMatch(item -> item.getCourse().getCourseId().equals(courseId));
 
-        Cart cart = new Cart();
-        cart.setUser(user);
-        cart.setItems(List.of());
-        cart.setStatus("ACTIVE");
-        return cartRepository.save(cart);
-    }
-
-    @Override
-    @Transactional
-    public Cart addCourseToCart(Long userId, Long courseId) {
-        Cart cart = getActiveCart(userId);
-        Courses course = coursesRepository.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy khóa học!"));
-
-        Optional<CartItem> existingItem = cart.getItems().stream()
-                .filter(item -> item.getCourse().getCourseId().equals(courseId))
-                .findFirst();
-
-        if (existingItem.isPresent()) {
-            throw new RuntimeException("Khóa học đã có trong giỏ hàng!");
+        if (alreadyExists) {
+            throw new RuntimeException("Course already in cart");
         }
 
         CartItem item = new CartItem();
         item.setCart(cart);
         item.setCourse(course);
-        item.setQuantity(1);
-
         cart.getItems().add(item);
-        return cartRepository.save(cart);
+        cartRepository.save(cart);
     }
 
     @Override
-    @Transactional
-    public Cart removeCourseFromCart(Long userId, Long courseId) {
-        Cart cart = getActiveCart(userId);
+    public void removeCourseFromCart(Long userId, Long courseId) {
 
-        cart.getItems().removeIf(item -> item.getCourse().getCourseId().equals(courseId));
-        return cartRepository.save(cart);
     }
 
     @Override
-    @Transactional
-    public Cart checkout(Long userId) {
-        Cart cart = cartRepository.findByUserUserIdAndStatus(userId, "ACTIVE")
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy giỏ hàng!"));
+    public void checkout(Long userId) {
 
-        for (CartItem item : cart.getItems()) {
-            Enrollments enrollment = new Enrollments();
-            enrollment.setUser(cart.getUser());
-            enrollment.setCourse(item.getCourse());
-            enrollment.setEnrolledAt(LocalDateTime.now());
-            enrollmentsRepository.save(enrollment);
-        }
+    }
 
-        cart.setStatus("COMPLETED");
-        return cartRepository.save(cart);
+    @Override
+    public List<CartItem> getCartItems(Long userId) {
+        return List.of();
     }
 }

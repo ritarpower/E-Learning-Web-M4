@@ -1,12 +1,17 @@
 package com.example.elearningwebm4.backend.controllers;
 
 import com.example.elearningwebm4.backend.models.Cart;
+import com.example.elearningwebm4.backend.models.CartItem;
+import com.example.elearningwebm4.backend.models.Users;
 import com.example.elearningwebm4.backend.services.CartService;
 import com.example.elearningwebm4.backend.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/cart")
@@ -15,42 +20,32 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @Autowired
-    private UsersService usersService;
-
-    @GetMapping("/{userId}")
-    public String viewCart(@PathVariable("userId") Long userId, Model model) {
-        Cart cart = cartService.getActiveCart(userId);
-        model.addAttribute("cart", cart);
-        return "cart/cart-view";
+    @PostMapping("/add")
+    public String addCourseToCart(@RequestParam Long userId, @RequestParam Long courseId, RedirectAttributes redirectAttributes) {
+        cartService.addCourseToCart(userId, courseId);
+        redirectAttributes.addFlashAttribute("message", "Khoá học đã được thêm vào giỏ hàng");
+        return "redirect:/cart/items?userId=" + userId;
     }
 
-    @PostMapping("/add-item")
-    public String addCourseToCart(@RequestParam("userId") Long userId,
-                                  @RequestParam("courseId") Long courseId,
-                                  Model model) {
-        try {
-            cartService.addCourseToCart(userId, courseId);
-        } catch (RuntimeException e) {
-            model.addAttribute("error", e.getMessage());
-        }
-        return "redirect:/cart/cart-view" + userId;
+    @GetMapping("/items")
+    public String getCartItems(@RequestParam Long userId, Model model) {
+        List<CartItem> items = cartService.getCartItems(userId);
+        model.addAttribute("items", items);
+        model.addAttribute("userId", userId);
+        return "cart/items";
     }
 
-    @PostMapping("/remove-item")
-    public String removeCourseFromCart(@RequestParam("userId") Long userId,
-                                       @RequestParam("courseId") Long courseId) {
+    @PostMapping("/remove")
+    public String removeCourseFromCart(@RequestParam Long userId, @RequestParam Long courseId, RedirectAttributes redirectAttributes) {
         cartService.removeCourseFromCart(userId, courseId);
-        return "redirect:/cart/cart-view" + userId;
+        redirectAttributes.addFlashAttribute("message", "Khoá học đã được xoá khỏi giỏ hàng");
+        return "redirect:/cart/items?userId=" + userId;
     }
 
     @PostMapping("/checkout")
-    public String checkout(@RequestParam("userId") Long userId, Model model) {
-        try {
-            cartService.checkout(userId);
-        } catch (RuntimeException e) {
-            model.addAttribute("error", e.getMessage());
-        }
-        return "redirect:/cart/cart-view" + userId;
+    public String checkout(@RequestParam Long userId, RedirectAttributes redirectAttributes) {
+        cartService.checkout(userId);
+        redirectAttributes.addFlashAttribute("message", "Đăng ký thành công!");
+        return "redirect:/cart/items?userId=" + userId;
     }
 }
