@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Form</title>
+</head>
+<body>
+<h2 th:text="${quiz.quizId != null} ? 'Chỉnh sửa Bài kiểm tra' : 'Tạo Bài kiểm tra'"></h2>
+<form th:if="${quiz.quizId != null}"
+      th:action="@{/quizzes/update/{id}(id=${quiz.quizId})}"
+      th:object="${quiz}"
+      method="post">
+    <label>Tiêu đề:</label>
+    <input type="text" th:field="*{title}" required><br>
+
+    <label>Điểm tối đa:</label>
+    <input type="number" step="0.01" th:field="*{totalMarks}" required><br>
+
+    <label>Lesson ID:</label>
+    <input type="number" th:field="*{lesson.lessonId}" required><br>
+
+    <button type="submit">Lưu</button>
+</form>
+
+<form th:unless="${quiz.quizId != null}"
+      th:action="@{/quizzes}"
+      th:object="${quiz}"
+      method="post">
+    <label>Tiêu đề:</label>
+    <input type="text" th:field="*{title}" required><br>
+
+    <label>Điểm tối đa:</label>
+    <input type="number" step="0.01" th:field="*{totalMarks}" required><br>
+
+    <label>Lesson ID:</label>
+    <input type="number" th:field="*{lesson.lessonId}" required><br>
+
+    <button type="submit">Lưu</button>
+</form>
+<a th:href="@{/quizzes}">Quay lại danh sách</a>
+</body>
+</html>

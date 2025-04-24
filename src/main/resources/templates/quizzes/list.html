@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quizzes</title>
+</head>
+<body>
+<h2>Quizzes List</h2>
+<a th:href="@{/quizzes/new}">Create New Quiz</a>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Total Marks</th>
+        <th>Lesson ID</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="quiz : ${quizzes}">
+        <td th:text="${quiz.quizId}"></td>
+        <td th:text="${quiz.title}"></td>
+        <td th:text="${quiz.totalMarks}"></td>
+        <td th:text="${quiz.lesson?.lessonId}"></td>
+        <td>
+            <a th:href="@{/quizzes/edit/{id}(id=${quiz.quizId})}">Edit</a>
+            <a th:href="@{/quizzes/delete/{id}(id=${quiz.quizId})}" onclick="return confirm('Are you sure?')">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
