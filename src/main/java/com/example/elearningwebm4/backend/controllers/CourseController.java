@@ -31,14 +31,14 @@ public class CourseController {
         return "course/course-list";
     }
 
-    @GetMapping("show-add-course-page")
+    @GetMapping("admin/show-add-course-page")
     public String showAddCoursesPage(Model model) {
         CoursesDto coursesDto = new CoursesDto();
         model.addAttribute("coursesDto", coursesDto);
         return "course/add-course-page";
     }
 
-    @GetMapping("show-edit-course/{id}")
+    @GetMapping("admin/show-edit-course/{id}")
     public String showEditCoursePage(@PathVariable(name = "id") Long id, Model model) {
         Courses courses = coursesService.findCoursesById(id);
         CourseEditDto courseEditDto = new CourseEditDto();
