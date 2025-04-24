@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @Setter
@@ -29,6 +27,6 @@ public class CartItem {
     @JoinColumn(name = "course_id", nullable = false)
     private Courses course;
 
-    @Column(name = "added_at", nullable = false)
-    private LocalDateTime addedAt = LocalDateTime.now();
+    @Column(name = "quantity", nullable = false)
+    private int quantity;
 }

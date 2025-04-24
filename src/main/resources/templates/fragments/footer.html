@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="site-footer">
+    <footer class="bg-dark text-white mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>E-Learning M4</h5>
+                    <p>Các khóa học trực tuyến chất lượng giúp nâng cao kỹ năng và sự nghiệp của bạn.</p>
+                </div>
+
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a th:href="@{/}" class="text-white">Trang chính</a></li>
+                        <li><a th:href="@{/cart}" class="text-white">Giỏ hàng</a></li>
+
+                        <li sec:authorize="isAuthenticated()">
+                            <a th:href="@{/logout}" class="text-white">Đăng xuất</a>
+                        </li>
+                        <li sec:authorize="isAnonymous()">
+                            <a th:href="@{/login}" class="text-white">Đăng nhập</a>
+                        </li>
+                        <li sec:authorize="isAnonymous()">
+                            <a th:href="@{/registration}" class="text-white">Đăng ký</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4">
+                    <h5>Liên hệ</h5>
+                    <p><i class="bi bi-envelope me-2"></i> contact@elearningm4.com</p>
+                    <p><i class="bi bi-telephone me-2"></i> +84 123456789</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <p class="mb-0">&copy; 2023 E-Learning M4. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+</html>

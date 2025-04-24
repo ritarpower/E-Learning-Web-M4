@@ -40,6 +40,9 @@ public class Users {
     @Column(name = "create_at", nullable = false, updatable = false)
     private LocalDateTime createAt;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Cart cart;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",

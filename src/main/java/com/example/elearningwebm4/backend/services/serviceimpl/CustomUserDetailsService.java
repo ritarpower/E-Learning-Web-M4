@@ -1,7 +1,7 @@
 package com.example.elearningwebm4.backend.services.serviceimpl;
 
 import com.example.elearningwebm4.backend.models.Users;
-import com.example.elearningwebm4.backend.repositories.UserRepository;
+import com.example.elearningwebm4.backend.repositories.IUsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
-    private UserRepository userRepository;
+    private IUsersRepository IUsersRepository;
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-        Users user = userRepository.findByEmail(usernameOrEmail);
+        Users user = IUsersRepository.findByEmail(usernameOrEmail);
         if (user == null) {
             throw new UsernameNotFoundException("Email hoặc mật khẩu không hợp lệ!");
         }

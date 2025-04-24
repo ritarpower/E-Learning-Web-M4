@@ -46,14 +46,26 @@
         </div>
     </div>
 
-    <div>
-        <a th:href="@{/(page=${coursesList.number - 1})}" th:if="${coursesList.hasPrevious()}">Previous</a>
-        <span th:text="${coursesList.number + 1} + '/' + ${coursesList.totalPages} "></span>
-        <a th:href="@{/(page=${coursesList.number + 1})}" th:if="${coursesList.hasNext()}">Next</a>
+    <div class="d-flex justify-content-center align-items-center mt-4 gap-3">
+
+        <a th:if="${coursesList.hasPrevious()}"
+           th:href="@{/(page=${coursesList.number - 1})}"
+           class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left"></i> Trang trước
+        </a>
+
+        <span class="fw-semibold">
+        Trang <span th:text="${coursesList.number + 1}"></span> / <span th:text="${coursesList.totalPages}"></span>
+    </span>
+
+        <a th:if="${coursesList.hasNext()}"
+           th:href="@{/(page=${coursesList.number + 1})}"
+           class="btn btn-outline-primary">
+            Trang sau <i class="bi bi-arrow-right"></i>
+        </a>
     </div>
+
 </div>
-
-
 
 <div th:each="c : ${coursesList}">
     <div class="modal fade" th:id="'modalDelete' + ${c.courseId}" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -80,7 +92,8 @@
     </div>
 </div>
 
-<!-- Modal thông báo -->
+<div th:replace="fragments/footer :: site-footer"></div>
+
 <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true"
      th:if="${message}">
     <div class="modal-dialog">
@@ -98,6 +111,7 @@
         </div>
     </div>
 </div>
+
 <script th:inline="javascript">
     /*<![CDATA[*/
     let hasMessage = /*[[${message != null}]]*/ false;

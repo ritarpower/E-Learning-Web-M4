@@ -5,8 +5,8 @@ package com.example.elearningwebm4.backend.configuration;
 import com.example.elearningwebm4.backend.common.EncryptPasswordUtils;
 import com.example.elearningwebm4.backend.models.Role;
 import com.example.elearningwebm4.backend.models.Users;
-import com.example.elearningwebm4.backend.repositories.RoleRepository;
-import com.example.elearningwebm4.backend.repositories.UserRepository;
+import com.example.elearningwebm4.backend.repositories.IRoleRepository;
+import com.example.elearningwebm4.backend.repositories.IUsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -19,19 +19,19 @@ import java.util.List;
 @Component
 public class DataSeedingListener implements ApplicationListener<ContextRefreshedEvent> {
     @Autowired
-    private UserRepository accountRepository;
+    private IUsersRepository accountRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
+    private IRoleRepository IRoleRepository;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (roleRepository.findByName("ROLE_ADMIN") == null) {
-            roleRepository.save(new Role("ROLE_ADMIN"));
+        if (IRoleRepository.findByName("ROLE_ADMIN") == null) {
+            IRoleRepository.save(new Role("ROLE_ADMIN"));
         }
 
-        if (roleRepository.findByName("ROLE_USER") == null) {
-            roleRepository.save(new Role("ROLE_USER"));
+        if (IRoleRepository.findByName("ROLE_USER") == null) {
+            IRoleRepository.save(new Role("ROLE_USER"));
         }
 
         //them admin
@@ -44,8 +44,8 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
             // mã hóa mật khẩu
             admin.setPassword(EncryptPasswordUtils.EncryptPasswordUtils("123456"));
             List<Role> roles = new ArrayList<>();
-            roles.add(roleRepository.findByName("ROLE_ADMIN"));
-            roles.add(roleRepository.findByName("ROLE_USER"));
+            roles.add(IRoleRepository.findByName("ROLE_ADMIN"));
+            roles.add(IRoleRepository.findByName("ROLE_USER"));
             admin.setRoles(roles);
             accountRepository.save(admin);
         }
@@ -60,7 +60,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
             // mã hóa mật khẩu
             user.setPassword(EncryptPasswordUtils.EncryptPasswordUtils("123456"));
             List<Role> roles = new ArrayList<>();
-            roles.add(roleRepository.findByName("ROLE_USER"));
+            roles.add(IRoleRepository.findByName("ROLE_USER"));
             user.setRoles(roles);
             accountRepository.save(user);
         }
