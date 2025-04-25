@@ -14,7 +14,6 @@ public class UsersDto {
     private String name;
     private String email;
     private String password;
-    private String role;
-    private boolean status;
+    private String confirmPassword;
     private LocalDateTime createAt;
 }

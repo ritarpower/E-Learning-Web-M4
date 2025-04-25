@@ -11,38 +11,37 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+
 <div th:replace="fragments/navbar :: navbar"></div>
 <div class="container my-5">
     <h2 class="text-primary mb-4">Giỏ hàng của bạn</h2>
 
-    <div th:if="${cartItems != null and #lists.isNotEmpty(cartItems)}">
+    <div th:if="${items != null}">
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                 <tr>
                     <th>Khóa học</th>
-                    <th>Mô tả</th>
                     <th>Giá</th>
-                    <th>Hành động</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="item : ${cartItems}">
-                    <td th:text="${item.title}"></td>
-                    <td th:text="${item.description}"></td>
-                    <td th:text="${item.price}"></td>
+                <tr th:each="item : ${items}">
+                    <td th:text="${item.course.title}"></td>
+                    <td th:text="${item.course.price} + ' VND'"></td>
                     <td>
-                        <a th:href="@{/cart/remove-item/{courseId}(courseId=${item.courseId})}"
-                           class="btn btn-danger btn-sm">
-                            <i class="bi bi-trash"></i> Xóa
-                        </a>
+                        <form th:action="@{/cart/remove-cart-item}" method="post" style="display:inline">
+                            <input type="hidden" name="courseId" th:value="${item.course.courseId}"/>
+                            <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Xóa</button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>
                 <tfoot>
                 <tr>
                     <th colspan="2" class="text-end">Tổng cộng:</th>
-                    <th th:text="${total}">$0.00</th>
+                    <th th:text="${total} + ' VND'"></th>
                     <th></th>
                 </tr>
                 </tfoot>
@@ -50,12 +49,15 @@
         </div>
 
         <div class="d-flex justify-content-between mt-4">
-            <a th:href="@{/}" class="btn btn-secondary">Tiếp tục mua sắm</a>
-            <button class="btn btn-success">Thanh toán</button>
+            <a th:href="@{/}" class="btn btn-secondary">Tiếp tục khám phá</a>
+            <form th:action="@{/cart/payment}" method="post">
+                <button type="submit" class="btn btn-success">Thanh toán</button>
+            </form>
+
         </div>
     </div>
 
-    <div th:if="${cartItems == null or #lists.isEmpty(cartItems)}" class="alert alert-info">
+    <div th:if="${items == null}" class="alert alert-info">
         <p>Giỏ hàng của bạn đang trống.</p>
         <a th:href="@{/}" class="btn btn-primary mt-2">Khám phá các khóa học</a>
     </div>

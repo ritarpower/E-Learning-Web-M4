@@ -1,69 +1,59 @@
 package com.example.elearningwebm4.backend.services.serviceimpl;
 
+
 import com.example.elearningwebm4.backend.models.*;
-import com.example.elearningwebm4.backend.repositories.*;
+import com.example.elearningwebm4.backend.repositories.ICartRepository;
+import com.example.elearningwebm4.backend.repositories.IEnrollmentsRepository;
 import com.example.elearningwebm4.backend.services.CartService;
+import com.example.elearningwebm4.backend.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.ArrayList;
 
 @Service
 public class CartServiceImpl implements CartService {
 
     @Autowired
-    private IUsersRepository usersRepository;
-
-    @Autowired
-    private ICoursesRepository coursesRepository;
+    private IEnrollmentsRepository enrollmentsRepository;
 
     @Autowired
     private ICartRepository cartRepository;
 
     @Autowired
-    private ICartItemRepository cartItemRepository;
+    private UsersService usersService;
 
     @Override
-    public void addCourseToCart(Long userId, Long courseId) {
-        Users user = usersRepository.findById(userId).get();
-        Courses course = coursesRepository.findById(courseId).get();
-        Cart cart = user.getCart();
+    public Cart findByUserId(Long userId) {
+        Cart cart = cartRepository.findByUserId(userId);
         if (cart == null) {
             cart = new Cart();
-            cart.setUser(user);
+            cart.setUser(usersService.findByUserId(userId));
+            cart.setItems(new ArrayList<>());
             cartRepository.save(cart);
-            user.setCart(cart);
+            return cart;
         }
+        return cart;
+    }
 
-        boolean alreadyExists = cart.getItems().stream()
-                .anyMatch(item -> item.getCourse().getCourseId().equals(courseId));
-
-        if (alreadyExists) {
-            throw new RuntimeException("Course already in cart");
+    @Override
+    @Transactional
+    public void payCart(Long userId) {
+        Cart cart = findByUserId(userId);
+        Users user = cart.getUser();
+        for (CartItem item : cart.getItems()) {
+            Courses course = item.getCourse();
+            boolean alreadyEnrolled = enrollmentsRepository.existsByCourseAndUser(course, user);
+            if (alreadyEnrolled) {
+                continue;
+            }
+            Enrollments enrollments = new Enrollments();
+            enrollments.setUser(user);
+            enrollments.setCourse(course);
+            enrollmentsRepository.save(enrollments);
         }
-
-        CartItem item = new CartItem();
-        item.setCart(cart);
-        item.setCourse(course);
-        cart.getItems().add(item);
+        cart.getItems().clear();
         cartRepository.save(cart);
-    }
-
-    @Override
-    public void removeCourseFromCart(Long userId, Long courseId) {
-
-    }
-
-    @Override
-    public void checkout(Long userId) {
-
-    }
-
-    @Override
-    public List<CartItem> getCartItems(Long userId) {
-        return List.of();
     }
 }

@@ -1,12 +1,12 @@
 package com.example.elearningwebm4.backend.repositories;
 
 import com.example.elearningwebm4.backend.models.Cart;
+import com.example.elearningwebm4.backend.models.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-import java.util.Optional;
-
-@Repository
 public interface ICartRepository extends JpaRepository<Cart, Long> {
-    Optional<Cart> findByUserId(Long userId);
+    @Query("SELECT c FROM Cart c WHERE c.user.userId = :userId")
+    Cart findByUserId(@Param("userId") Long userId);
 }
