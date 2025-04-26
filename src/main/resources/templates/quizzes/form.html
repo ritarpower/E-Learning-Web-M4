@@ -7,7 +7,7 @@
 <body>
 <h2 th:text="${quiz.quizId != null} ? 'Chỉnh sửa Bài kiểm tra' : 'Tạo Bài kiểm tra'"></h2>
 <form th:if="${quiz.quizId != null}"
-      th:action="@{/quizzes/update/{id}(id=${quiz.quizId})}"
+      th:action="@{/templates/quizzes/update/{id}(id=${quiz.quizId})}"
       th:object="${quiz}"
       method="post">
     <label>Tiêu đề:</label>
@@ -23,7 +23,7 @@
 </form>
 
 <form th:unless="${quiz.quizId != null}"
-      th:action="@{/quizzes}"
+      th:action="@{/templates/quizzes}"
       th:object="${quiz}"
       method="post">
     <label>Tiêu đề:</label>
@@ -37,6 +37,6 @@
 
     <button type="submit">Lưu</button>
 </form>
-<a th:href="@{/quizzes}">Quay lại danh sách</a>
+<a th:href="@{/templates/quizzes}">Quay lại danh sách</a>
 </body>
 </html>

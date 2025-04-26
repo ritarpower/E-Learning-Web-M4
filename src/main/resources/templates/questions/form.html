@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Form Câu Hỏi</title>
+</head>
+<body>
+<h2 th:text="${question.questionId != null} ? 'Sửa Câu Hỏi' : 'Tạo Câu Hỏi'"></h2>
+<form th:action="${question.questionId != null} ? @{/questions/update/{id}(id=${question.questionId})} : @{/questions/quiz/{quizId}(quizId=${quizId})}"
+      th:object="${question}" method="post">
+  <!-- Trường ẩn để giữ quizId -->
+  <input type="hidden" th:field="*{quiz.quizId}" th:value="${quizId}">
+
+  <div>
+    <label>Nội Dung Câu Hỏi:</label>
+    <input type="text" th:field="*{content}" required>
+    <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}" style="color: red;"></span>
+  </div>
+  <div>
+    <label>Lựa Chọn A:</label>
+    <input type="text" th:field="*{optionA}" required>
+    <span th:if="${#fields.hasErrors('optionA')}" th:errors="*{optionA}" style="color: red;"></span>
+  </div>
+  <div>
+    <label>Lựa Chọn B:</label>
+    <input type="text" th:field="*{optionB}" required>
+    <span th:if="${#fields.hasErrors('optionB')}" th:errors="*{optionB}" style="color: red;"></span>
+  </div>
+  <div>
+    <label>Lựa Chọn C:</label>
+    <input type="text" th:field="*{optionC}" required>
+    <span th:if="${#fields.hasErrors('optionC')}" th:errors="*{optionC}" style="color: red;"></span>
+  </div>
+  <div>
+    <label>Lựa Chọn D:</label>
+    <input type="text" th:field="*{optionD}" required>
+    <span th:if="${#fields.hasErrors('optionD')}" th:errors="*{optionD}" style="color: red;"></span>
+  </div>
+  <div>
+    <label>Đáp Án Đúng (A, B, C, D):</label>
+    <input type="text" th:field="*{correctAnswer}" required>
+    <span th:if="${#fields.hasErrors('correctAnswer')}" th:errors="*{correctAnswer}" style="color: red;"></span>
+  </div>
+  <button type="submit">Lưu</button>
+</form>
+<a th:href="@{/questions/quiz/{quizId}(quizId=${quizId})}">Quay Lại Danh Sách</a>
+</body>
+</html>

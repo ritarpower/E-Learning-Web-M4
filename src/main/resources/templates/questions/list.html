@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh Sách Câu Hỏi</title>
+</head>
+<body>
+<h2>Danh Sách Câu Hỏi (Quiz ID: <span th:text="${quizId}"></span>)</h2>
+<a th:href="@{/questions/new/{quizId}(quizId=${quizId})}">Tạo Câu Hỏi Mới</a>
+<a th:href="@{/quizzes}">Quay Lại Danh Sách Quiz</a>
+<div th:if="${questions.isEmpty()}">
+    <p>Không có câu hỏi nào.</p>
+</div>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nội Dung</th>
+        <th>Lựa Chọn A</th>
+        <th>Lựa Chọn B</th>
+        <th>Lựa Chọn C</th>
+        <th>Lựa Chọn D</th>
+        <th>Đáp Án Đúng</th>
+        <th>Hành Động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="question : ${questions}">
+        <td th:text="${question.questionId}"></td>
+        <td th:text="${question.content}"></td>
+        <td th:text="${question.optionA}"></td>
+        <td th:text="${question.optionB}"></td>
+        <td th:text="${question.optionC}"></td>
+        <td th:text="${question.optionD}"></td>
+        <td th:text="${question.correctAnswer}"></td>
+        <td>
+            <a th:href="@{/questions/edit/{id}(id=${question.questionId})}">Sửa</a>
+            <a th:href="@{/questions/delete/{id}(id=${question.questionId})}" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
