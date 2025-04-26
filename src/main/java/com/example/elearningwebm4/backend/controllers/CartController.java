@@ -80,13 +80,11 @@ public class CartController {
 
     @PostMapping("/remove-cart-item")
     public String removeCartItem(@RequestParam(name = "courseId") Long courseId,
-                                 RedirectAttributes redirectAttributes,
                                  Model model) {
         Long userId = (Long) model.getAttribute("userId");
         Cart cart = cartService.findByUserId(userId);
         System.out.println(cart.getCartId());
         cartItemService.removeCartItem(cart.getCartId(), courseId);
-        redirectAttributes.addFlashAttribute("mesage", "Đã xóa 1 khóa học khỏi giỏ hàng!");
         return "redirect:/cart/cart-view";
     }
 
