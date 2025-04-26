@@ -2,6 +2,7 @@ package com.example.elearningwebm4.backend.controllers;
 
 import com.example.elearningwebm4.backend.models.Cart;
 import com.example.elearningwebm4.backend.models.CartItem;
+import com.example.elearningwebm4.backend.models.Users;
 import com.example.elearningwebm4.backend.services.CartItemService;
 import com.example.elearningwebm4.backend.services.CartService;
 import com.example.elearningwebm4.backend.services.UsersService;
@@ -9,7 +10,9 @@ import com.example.elearningwebm4.backend.services.serviceimpl.CustomUserDetails
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,14 +34,18 @@ public class CartController {
     private CartItemService cartItemService;
 
     @GetMapping("/cart-view")
-    public String cartView(Model model) {
-        Long userId = (Long) model.getAttribute("userId");
-        if (userId == null) {
+    public String cartView(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+//        Long userId = (Long) model.getAttribute("userId");
+//        if (userId == null) {
+//            return "redirect:/login";
+//        }
+        // HỎI ANH CÔNG LÀ DÙNG @AUTHEN VỚI TẠO 1 CONTROLLERGLOBAL THÌ CÁI NÀO OK HƠN
+        Users users = usersService.findByEmail(userDetails.getUsername());
+        if (userDetails == null) {
             return "redirect:/login";
         }
-
-        Cart cart = cartService.findByUserId(userId);
-
+//        Cart cart = cartService.findByUserId(userId);
+        Cart cart = cartService.findByUserId(users.getUserId());
         if (cart.getItems().isEmpty()) {
             return "cart/cart-view";
         }
