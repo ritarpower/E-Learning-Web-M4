@@ -30,4 +30,9 @@ public class Enrollments {
 
     @Column(name = "enrolled_at", nullable = false)
     private LocalDateTime enrolledAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.enrolledAt = LocalDateTime.now();
+    }
 }

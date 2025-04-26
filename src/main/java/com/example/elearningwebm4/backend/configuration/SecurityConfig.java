@@ -33,9 +33,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/","/css/**", "/js/**", "/images/**","/search", "/login","/registration","/show-course-detail/**","/cart/**").permitAll() // Các đường dẫn không cần login
+                        .requestMatchers("/","/css/**", "/js/**", "/images/**","/search", "/login","/registration/**","/show-course-detail/**").permitAll() // Các đường dẫn không cần login
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Yêu cầu role ADMIN
-                        .requestMatchers("/user/**").hasRole("USER") // Yêu cầu Role USER
+                        .requestMatchers("/user/**").hasRole("USER")// Yêu cầu Role USER
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

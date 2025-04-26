@@ -47,6 +47,15 @@ public class CourseController {
         return "course/edit-course-page";
     }
 
+    @GetMapping("user/my-course")
+    public String showMyCourses(@RequestParam(name = "page", required = false, defaultValue = "0") int page,
+                                Model model) {
+        Pageable pageable = PageRequest.of(page, 6);
+
+//        chưa xử lý logic ở đay
+        return "course/my-course";
+    }
+
     @GetMapping("show-course-detail/{id}")
     public String showCourseDetailPage(@PathVariable(name = "id") Long id, Model model) {
         Courses courses = coursesService.findCoursesById(id);

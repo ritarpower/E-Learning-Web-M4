@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="sidebar">
+    <div id="sidebar-toggle">
+        <i class="bi bi-chevron-right"></i>
+    </div>
+
+    <div id="sidebar">
+        <ul class="list-unstyled">
+            <li><a th:href="@{/}">Trang chủ</a></li>
+            <li><a th:href="@{/}">Khóa học</a></li>
+            <li><a th:href="@{/}">Tài khoản</a></li>
+            <li><a th:href="@{/}">Cài đặt</a></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

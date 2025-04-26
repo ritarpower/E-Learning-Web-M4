@@ -1,0 +1,1 @@
+SELECT * FROM `e-learning-web`.courses;

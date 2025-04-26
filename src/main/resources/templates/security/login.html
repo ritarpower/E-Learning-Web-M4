@@ -14,12 +14,12 @@
     <div class="row mt-5">
         <div class="col-6 mx-auto">
             <h1>Đăng nhập</h1>
-            <div th:if="${param.error}">
-                <div class="alert alert-danger">Email hoặc mật khẩu không hợp lệ !!!</div>
-            </div>
-            <div th:if="${param.logout}">
-                <div class="alert alert-success">Bạn đã đăng xuất !!!</div>
-            </div>
+            <!--            <div th:if="${param.error}">-->
+            <!--                <div class="alert alert-danger">Email hoặc mật khẩu không hợp lệ !!!</div>-->
+            <!--            </div>-->
+            <!--            <div th:if="${param.logout}">-->
+            <!--                <div class="alert alert-success">Bạn đã đăng xuất !!!</div>-->
+            <!--            </div>-->
             <form
                     class="form-horizontal"
                     method="post"
@@ -49,6 +49,34 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true"
+     th:if="${message}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="messageModalLabel">Thông báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body">
+                <p th:text="${message}"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let hasMessage = /*[[${message != null}]]*/ false;
+    if (hasMessage) {
+        let myModal = new bootstrap.Modal(document.getElementById('messageModal'));
+        myModal.show();
+    }
+    /*]]>*/
+</script>
 
 <script crossorigin="anonymous"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"

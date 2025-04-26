@@ -1,96 +1,59 @@
 package com.example.elearningwebm4.backend.services.serviceimpl;
 
+
 import com.example.elearningwebm4.backend.models.*;
-import com.example.elearningwebm4.backend.repositories.*;
+import com.example.elearningwebm4.backend.repositories.ICartRepository;
+import com.example.elearningwebm4.backend.repositories.IEnrollmentsRepository;
 import com.example.elearningwebm4.backend.services.CartService;
+import com.example.elearningwebm4.backend.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.ArrayList;
 
 @Service
 public class CartServiceImpl implements CartService {
+
+    @Autowired
+    private IEnrollmentsRepository enrollmentsRepository;
+
     @Autowired
     private ICartRepository cartRepository;
 
     @Autowired
-    private IUsersRepository usersRepository;
-
-    @Autowired
-    private ICoursesRepository coursesRepository;
-
-    @Autowired
-    private IEnrollments enrollmentsRepository;
+    private UsersService usersService;
 
     @Override
-    public Cart getActiveCart(Long userId) {
-        return cartRepository.findByUserUserIdAndStatus(userId, "ACTIVE")
-                .orElseGet(() -> createCart(userId));
-    }
-
-    @Override
-    public Cart createCart(Long userId) {
-        Users user = usersRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng!"));
-
-        Cart cart = new Cart();
-        cart.setUser(user);
-        cart.setItems(List.of());
-        cart.setStatus("ACTIVE");
-        return cartRepository.save(cart);
-    }
-
-    @Override
-    @Transactional
-    public Cart addCourseToCart(Long userId, Long courseId) {
-        Cart cart = getActiveCart(userId);
-        Courses course = coursesRepository.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy khóa học!"));
-
-        Optional<CartItem> existingItem = cart.getItems().stream()
-                .filter(item -> item.getCourse().getCourseId().equals(courseId))
-                .findFirst();
-
-        if (existingItem.isPresent()) {
-            throw new RuntimeException("Khóa học đã có trong giỏ hàng!");
+    public Cart findByUserId(Long userId) {
+        Cart cart = cartRepository.findByUserId(userId);
+        if (cart == null) {
+            cart = new Cart();
+            cart.setUser(usersService.findByUserId(userId));
+            cart.setItems(new ArrayList<>());
+            cartRepository.save(cart);
+            return cart;
         }
-
-        CartItem item = new CartItem();
-        item.setCart(cart);
-        item.setCourse(course);
-        item.setQuantity(1);
-
-        cart.getItems().add(item);
-        return cartRepository.save(cart);
+        return cart;
     }
 
     @Override
     @Transactional
-    public Cart removeCourseFromCart(Long userId, Long courseId) {
-        Cart cart = getActiveCart(userId);
-
-        cart.getItems().removeIf(item -> item.getCourse().getCourseId().equals(courseId));
-        return cartRepository.save(cart);
-    }
-
-    @Override
-    @Transactional
-    public Cart checkout(Long userId) {
-        Cart cart = cartRepository.findByUserUserIdAndStatus(userId, "ACTIVE")
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy giỏ hàng!"));
-
+    public void payCart(Long userId) {
+        Cart cart = findByUserId(userId);
+        Users user = cart.getUser();
         for (CartItem item : cart.getItems()) {
-            Enrollments enrollment = new Enrollments();
-            enrollment.setUser(cart.getUser());
-            enrollment.setCourse(item.getCourse());
-            enrollment.setEnrolledAt(LocalDateTime.now());
-            enrollmentsRepository.save(enrollment);
+            Courses course = item.getCourse();
+            boolean alreadyEnrolled = enrollmentsRepository.existsByCourseAndUser(course, user);
+            if (alreadyEnrolled) {
+                continue;
+            }
+            Enrollments enrollments = new Enrollments();
+            enrollments.setUser(user);
+            enrollments.setCourse(course);
+            enrollmentsRepository.save(enrollments);
         }
-
-        cart.setStatus("COMPLETED");
-        return cartRepository.save(cart);
+        cart.getItems().clear();
+        cartRepository.save(cart);
     }
 }
