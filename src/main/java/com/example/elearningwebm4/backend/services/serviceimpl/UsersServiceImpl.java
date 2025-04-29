@@ -35,4 +35,20 @@ public class UsersServiceImpl implements UsersService {
         return usersRepository.findByNameContaining(name, pageable);
     }
 
+    @Override
+    public void saveUser(Users user) {
+        usersRepository.save(user);
+    }
+
+    @Override
+    public void deleteUserById(Long userId) {
+        usersRepository.deleteById(userId);
+    }
+
+    @Override
+    public void changeStatusUserById(Long userId) {
+        Users user = usersRepository.findById(userId).get();
+        user.setStatus(!user.isStatus());
+        usersRepository.save(user);
+    }
 }

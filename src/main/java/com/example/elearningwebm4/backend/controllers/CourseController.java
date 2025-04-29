@@ -102,7 +102,7 @@ public class CourseController {
         return "redirect:/";
     }
 
-    @GetMapping("/search")
+    @GetMapping("/search-course")
     public String searchCourses(@RequestParam(name = "search") String title,
                                 @RequestParam(name = "page", required = false, defaultValue = "0") int page,
                                 Model model) {

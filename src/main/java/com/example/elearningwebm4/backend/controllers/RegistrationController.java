@@ -5,8 +5,7 @@ import com.example.elearningwebm4.backend.dto.UsersDto;
 import com.example.elearningwebm4.backend.models.Role;
 import com.example.elearningwebm4.backend.models.Users;
 import com.example.elearningwebm4.backend.repositories.IRoleRepository;
-import com.example.elearningwebm4.backend.repositories.IUsersRepository;
-import org.springframework.beans.BeanUtils;
+import com.example.elearningwebm4.backend.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +27,7 @@ public class RegistrationController {
     private IRoleRepository roleRepository;
 
     @Autowired
-    private IUsersRepository usersRepository;
+    private UsersService usersService;
 
     @GetMapping
     public String registrationForm(Model model){
@@ -43,7 +42,7 @@ public class RegistrationController {
         if (bindingResult.hasErrors()) {
             return "security/registration";
         }
-        if(usersRepository.findByEmail(userDto.getEmail()) == null){
+        if(usersService.findByEmail(userDto.getEmail()) == null){
             if (userDto.getPassword().equals(userDto.getConfirmPassword())) {
                 Users user = new Users();
                 user.setName(userDto.getName());
@@ -53,7 +52,7 @@ public class RegistrationController {
                 List<Role> roles = new ArrayList<>();
                 roles.add(roleRepository.findByName("ROLE_USER"));
                 user.setRoles(roles);
-                usersRepository.save(user);
+                usersService.saveUser(user);
                 redirectAttributes.addFlashAttribute("message", "Tạo mới tài khoản thành công!");
                 return "redirect:/login";
             } else {
