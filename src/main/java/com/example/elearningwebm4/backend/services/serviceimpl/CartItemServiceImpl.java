@@ -41,11 +41,8 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public void removeCartItem(Long cartId, Long courseId) {
-        if(!cartItemRepository.existsByCart_CartIdAndCourse_CourseId(cartId, courseId)) {
-            throw new RuntimeException("Khóa học không còn tồn tại trong giỏ hàng");
-        }
-        CartItem cartItem = cartItemRepository.findByCart_CartIdAndCourse_CourseId(cartId, courseId);
-        cartItemRepository.delete(cartItem);
+    public void removeCartItem(Long cartItemId) {
+        cartItemRepository.deleteById(cartItemId);
     }
+
 }

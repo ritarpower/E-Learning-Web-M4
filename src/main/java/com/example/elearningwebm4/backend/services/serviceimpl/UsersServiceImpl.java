@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 public class UsersServiceImpl implements UsersService {
@@ -27,7 +26,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public Page<Users> findAllUsers(Pageable pageable) {
-        return usersRepository.findAll(pageable);
+        return usersRepository.findAllUsers(pageable);
     }
 
     @Override
@@ -40,10 +39,10 @@ public class UsersServiceImpl implements UsersService {
         usersRepository.save(user);
     }
 
-    @Override
-    public void deleteUserById(Long userId) {
-        usersRepository.deleteById(userId);
-    }
+//    @Override
+//    public void deleteUserById(Long userId) {
+//        usersRepository.deleteById(userId);
+//    }
 
     @Override
     public void changeStatusUserById(Long userId) {

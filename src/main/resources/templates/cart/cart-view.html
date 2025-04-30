@@ -32,7 +32,7 @@
                     <td th:text="${item.course.price} + ' VND'"></td>
                     <td>
                         <form th:action="@{/cart/remove-cart-item}" method="post" style="display:inline">
-                            <input type="hidden" name="courseId" th:value="${item.course.courseId}"/>
+                            <input type="hidden" name="cartItemId" th:value="${item.cartItemId}"/>
                             <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Xóa</button>
                         </form>
                     </td>

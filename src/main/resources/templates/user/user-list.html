@@ -12,10 +12,13 @@
 </head>
 <body>
 <div th:replace="fragments/navbar :: navbar"></div>
+
+<div th:replace="fragments/sidebar :: sidebar"></div>
+
 <div class="container my-5">
     <h2 class="text-primary mb-4">Danh sách người dùng</h2>
-    <form class="d-flex mb-3" th:action="@{/search-user}" method="get">
-        <input class="form-control me-2" type="search" placeholder="Tìm kiếm người dùng..." aria-label="Search" name="keyword" th:value="${keyword}">
+    <form class="d-flex mb-3" th:action="@{/admin/search-user}" method="get">
+        <input class="form-control me-2" type="search" name="search" placeholder="Tìm kiếm người dùng..." aria-label="Search">
         <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i> Tìm</button>
     </form>
     <div class="table-responsive">
@@ -36,49 +39,76 @@
                 <td th:text="${u.name}"></td>
                 <td th:text="${u.email}"></td>
                 <td th:text="${u.createAt}"></td>
-                <td th:text="${u.status}"></td>
                 <td>
+                    <span th:if="${u.status}" class="text-success">
+                        <i class="bi bi-circle-fill" style="color: green;"></i> Active
+                    </span>
+                    <span th:if="${!u.status}" class="text-danger">
+                        <i class="bi bi-circle-fill" style="color: red;"></i> Disable
+                    </span>
+                </td>
+                <td>
+                    <a th:href="@{'/admin/user-list/'+ ${u.userId}}" class="btn btn-primary btn-sm">Xem chi tiết</a>
                     <button class="btn btn-warning btn-sm"
                             data-bs-toggle="modal" th:attr="data-bs-target=${'#modalChange' + u.userId}">
                         Đổi trạng thái
                     </button>
-                    <button class="btn btn-danger btn-sm"
-                            data-bs-toggle="modal" th:attr="data-bs-target=${'#modalDelete' + u.userId}">
-                        Xoá
-                    </button>
+<!--                    <button class="btn btn-danger btn-sm"-->
+<!--                            data-bs-toggle="modal" th:attr="data-bs-target=${'#modalDelete' + u.userId}">-->
+<!--                        Xoá-->
+<!--                    </button>-->
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
 
-</div>
-<!--<div th:replace="fragments/footer :: site-footer"></div>-->
+    <div class="d-flex justify-content-center align-items-center mt-4 gap-3">
 
-<div th:each="u : ${usersList}">
-    <div class="modal fade" th:id="'modalDelete' + ${u.userId}" tabindex="-1" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" th:id="'labelDelete__' + ${u.userId}">Xóa người dùng</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p th:text="'Bạn có chắc muốn xóa người dùng ' + ${u.name} + ' với email ' + ${u.email} + '?'"></p>
-                    <small style="color: red; font-style: italic">Lưu ý hành động này không thể hoàn tác!</small>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        <a th:if="${usersList.hasPrevious()}"
+           th:href="@{/(page=${usersList.number - 1})}"
+           class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left"></i> Trang trước
+        </a>
 
-                    <form th:action="@{'/' + ${u.userId} + '/delete-user'}" method="post">
-                        <button type="submit" class="btn btn-danger">Xác nhận</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <span class="fw-semibold">
+        Trang <span th:text="${usersList.number + 1}"></span> / <span th:text="${usersList.totalPages}"></span>
+    </span>
+
+        <a th:if="${usersList.hasNext()}"
+           th:href="@{/(page=${usersList.number + 1})}"
+           class="btn btn-outline-primary">
+            Trang sau <i class="bi bi-arrow-right"></i>
+        </a>
     </div>
+
 </div>
+<div th:replace="fragments/footer :: site-footer"></div>
+
+<!--<div th:each="u : ${usersList}">-->
+<!--    <div class="modal fade" th:id="'modalDelete' + ${u.userId}" tabindex="-1" aria-labelledby="exampleModalLabel"-->
+<!--         aria-hidden="true">-->
+<!--        <div class="modal-dialog">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <h5 class="modal-title" th:id="'labelDelete__' + ${u.userId}">Xóa người dùng</h5>-->
+<!--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+<!--                    <p th:text="'Bạn có chắc muốn xóa người dùng ' + ${u.name} + ' với email ' + ${u.email} + '?'"></p>-->
+<!--                    <small style="color: red; font-style: italic">Lưu ý hành động này không thể hoàn tác!</small>-->
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>-->
+
+<!--                    <form th:action="@{'/' + ${u.userId} + '/delete-user'}" method="post">-->
+<!--                        <button type="submit" class="btn btn-danger">Xác nhận</button>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
 <div th:each="u : ${usersList}">
     <div class="modal fade" th:id="'modalChange' + ${u.userId}" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -91,12 +121,11 @@
                 </div>
                 <div class="modal-body">
                     <p th:text="'Bạn có chắc muốn đổi trạng thái người dùng ' + ${u.name} + ' với email ' + ${u.email} + '?'"></p>
-                    <small style="color: red; font-style: italic">Lưu ý hành động này không thể hoàn tác!</small>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
 
-                    <form th:action="@{'/' + ${u.userId} + '/change-status'}" method="post">
+                    <form th:action="@{'/admin/' + ${u.userId} + '/change-status'}" method="post">
                         <button type="submit" class="btn btn-danger">Xác nhận</button>
                     </form>
                 </div>
@@ -131,6 +160,19 @@
         myModal.show();
     }
     /*]]>*/
+</script>
+
+<script>
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('sidebar-toggle');
+
+    toggleBtn.addEventListener('click', function () {
+        sidebar.classList.add('show');
+    });
+
+    sidebar.addEventListener('mouseleave', function () {
+        sidebar.classList.remove('show');
+    });
 </script>
 </body>
 </html>
