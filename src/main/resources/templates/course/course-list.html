@@ -19,8 +19,8 @@
     <div class="container my-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="text-primary mb-0">Khóa học nổi bật</h2>
-            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/show-add-course-page}"
-               class="btn btn-primary btn-sm">Thêm khóa học mới</a>
+            <!--            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/show-add-course-page}"-->
+            <!--               class="btn btn-primary btn-sm">Thêm khóa học mới</a>-->
             <a sec:authorize="hasRole('ROLE_USER')" th:href="@{/user/my-course}" class="btn btn-primary btn-sm">Khóa học
                 của tôi</a>
         </div>

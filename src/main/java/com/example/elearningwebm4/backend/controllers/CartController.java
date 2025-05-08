@@ -14,8 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.net.http.HttpRequest;
-
 @Controller
 @RequestMapping("/cart")
 public class CartController {
@@ -68,14 +66,12 @@ public class CartController {
     }
 
     @PostMapping("/remove-cart-item")
-    public String removeCartItemFromCart(@RequestParam(name = "courseId") Long courseId,
+    public String removeCartItemFromCart(@RequestParam(name = "cartItemId") Long cartItemId,
                                          @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) {
             return "redirect:/login";
         }
-        Users user = usersService.findByEmail(userDetails.getUsername());
-        Cart cart = cartService.findByUserId(user.getUserId());
-        cartItemService.removeCartItem(cart.getCartId(), courseId);
+        cartItemService.removeCartItem(cartItemId);
         return "redirect:/cart/cart-view";
     }
 

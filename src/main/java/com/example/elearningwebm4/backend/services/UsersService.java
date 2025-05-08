@@ -11,4 +11,7 @@ public interface UsersService {
     Users findByUserId(Long userId);
     Page<Users> findAllUsers(Pageable pageable);
     Page<Users> findByNameContaining(String name, Pageable pageable);
+    void saveUser(Users user);
+    //    void deleteUserById(Long userId);
+    void changeStatusUserById(Long userId);
 }
