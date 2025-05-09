@@ -16,7 +16,7 @@ public class LessonContentSeederJava implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         updateLessonContent(1L, """
-<h2>1. Lớp và Đối tượng (Class & Object)</h2>
+<h2>Bài 1: Lớp và Đối tượng (Class & Object)</h2>
 
 <p><strong>Lớp (Class)</strong> là một <em>khuôn mẫu</em> (template/blueprint) dùng để mô tả <strong>thuộc tính</strong> (data fields) và <strong>hành vi</strong> (methods) của một nhóm đối tượng. Một lớp <em>không chiếm bộ nhớ</em> cho đến khi có đối tượng cụ thể được tạo từ nó.</p>
 
@@ -120,7 +120,7 @@ public class Entry {
 
 
         updateLessonContent(2L, """
-<h2>2. Biến tĩnh và Phương thức tĩnh (Static Variables and Methods)</h2>
+<h2>Bài 2: Biến tĩnh và Phương thức tĩnh (Static Variables and Methods)</h2>
 
 <p><strong>Static</strong> là từ khóa trong Java dùng để khai báo các thành phần mà không phụ thuộc vào đối tượng (instance) của lớp. Các thành phần static thuộc về lớp, chứ không thuộc riêng một đối tượng cụ thể.</p>
 
@@ -214,7 +214,7 @@ public class Main {
 
 
         updateLessonContent(3L, """
-<h2>3. Tính đóng gói (Encapsulation)</h2>
+<h2>Bài 3: Tính đóng gói (Encapsulation)</h2>
 
 <p><strong>Encapsulation</strong> (đóng gói) là quá trình che giấu dữ liệu bên trong lớp và chỉ cho phép truy cập thông qua các phương thức công khai (getter/setter). Đây là một trong bốn nguyên lý cơ bản của lập trình hướng đối tượng (OOP).</p>
 
@@ -300,7 +300,7 @@ public class Main {
 
 
         updateLessonContent(4L, """
-<h2>4. Tính kế thừa (Inheritance)</h2>
+<h2>Bài 4: Tính kế thừa (Inheritance)</h2>
 
 <p><strong>Inheritance</strong> (kế thừa) là cơ chế trong lập trình hướng đối tượng cho phép một lớp <em>kế thừa</em> các thuộc tính (fields) và phương thức (methods) từ một lớp khác. Đây là một trong những nền tảng quan trọng nhất của OOP, giúp tái sử dụng mã nguồn và mở rộng chương trình.</p>
 
@@ -434,7 +434,7 @@ class Cat extends Animal {
 
 
         updateLessonContent(5L, """
-<h2>5. Tính đa hình và Tính trừu tượng (Polymorphism & Abstraction)</h2>
+<h2>Bài 5: Tính đa hình và Tính trừu tượng (Polymorphism & Abstraction)</h2>
 
 <h3>1. Tính đa hình (Polymorphism)</h3>
 
@@ -608,7 +608,7 @@ Tính đa hình và tính trừu tượng giúp hệ thống phần mềm linh h
 
 
         updateLessonContent(6L, """
-<h2>6. Mối quan hệ giữa các đối tượng (Association, Aggregation, Composition)</h2>
+<h2>Bài 6: Mối quan hệ giữa các đối tượng (Association, Aggregation, Composition)</h2>
 
 <p>Trong lập trình hướng đối tượng (OOP), các đối tượng không tồn tại đơn lẻ mà thường liên kết với nhau để thực hiện các chức năng phức tạp. Có ba loại mối quan hệ chính:</p>
 

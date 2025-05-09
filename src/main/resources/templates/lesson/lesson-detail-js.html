@@ -34,10 +34,11 @@
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a th:href="@{/}">Trang chủ</a></li>
-      <li class="breadcrumb-item"><a th:href="@{//show-course-detail/2}">Danh sách bài học</a></li>
+      <li class="breadcrumb-item"><a th:href="@{/}">Danh sách khóa học</a></li>
+      <li class="breadcrumb-item"><a th:href="@{/show-course-detail/2}">Chi tiết khóa học</a></li>
+      <li class="breadcrumb-item"><a th:href="@{/lessons/topics/2}">Danh sách bài học</a></li>
       <li class="breadcrumb-item active" aria-current="page">
-        <div th:text="${lesson.title}"></div>
+        <div th:text="${lesson.title}"> Tiêu đề </div>
       </li>
     </ol>
   </nav>

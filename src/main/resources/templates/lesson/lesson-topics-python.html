@@ -42,6 +42,14 @@
 
     <h1 class="text-center mb-4">Danh sách Bài học Python</h1>
 
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}">Danh sách khóa học</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/show-course-detail/3}">Chi tiết khóa học</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Danh sách bài học</li>
+        </ol>
+    </nav>
+
     <ul class="list-group shadow-sm">
         <li class="list-group-item" th:each="lesson : ${lessons}">
             <a th:href="@{'/lessons/lesson-detail/' + ${lesson.lessonId}}"
