@@ -11,6 +11,8 @@
 <body>
 <div th:replace="fragments/navbar :: navbar"></div>
 
+<div th:replace="fragments/sidebar :: sidebar"></div>
+
 <div class="container my-5">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -30,12 +32,43 @@
                 <div class="card h-100 bg-light">
                     <div class="card-body">
                         <h5 class="card-title">Đăng ký khóa học</h5>
+
+
+
+
+
                         <p><strong>Số học viên đã đăng ký:</strong> <span
                                 th:text="${courses.enrollments.size()}"></span></p>
                         <p><strong>Giá: </strong><span th:text="${courses.price} + ' VND'"></span></p>
-                        <a th:href="@{/}" class="btn btn-success w-100">Đăng ký khóa học</a>
-                        <!--                        Chức năng add to cart-->
 
+
+                        <!--                        Xử lý khi người dùng đã có khoá học-->
+<!--                        <div sec:authorize="isAuthenticated()">-->
+<!--                            <form th:action="@{/cart/add-to-cart}" method="post">-->
+<!--                                <input type="hidden" name="courseId" th:value="${courses.courseId}"/>-->
+<!--                                <button type="submit" class="btn btn-success w-100">Thêm vào giỏ hàng</button>-->
+<!--                            </form>-->
+<!--                        </div>-->
+                                                            <!--TEST-->
+                        <div sec:authorize="isAuthenticated()">
+                            <!-- Nếu đã thanh toán -->
+                            <form th:if="${enrollments} != null" th:action="@{'/lessons/topics/' + ${courses.courseId}}" method="get">
+                                <button type="submit" class="btn btn-success w-100">Vào học</button>
+                            </form> <!--TEST BUTTON-->
+
+                            <!-- Nếu chưa thanh toán -->
+                            <form th:if="${enrollments} == null" th:action="@{/cart/add-to-cart}" method="post">
+                                <input type="hidden" name="courseId" th:value="${courses.courseId}" />
+                                <button type="submit" class="btn btn-success w-100">Thêm vào giỏ hàng</button>
+                            </form>
+                        </div>
+
+
+
+
+                        <div sec:authorize="isAnonymous()">
+                            <a th:href="@{/login}" class="btn btn-success w-100">Đăng nhập để tham gia khóa học</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -47,5 +80,18 @@
     </div>
 </div>
 <div th:replace="fragments/footer :: site-footer"></div>
+
+<script>
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('sidebar-toggle');
+
+    toggleBtn.addEventListener('click', function () {
+        sidebar.classList.add('show');
+    });
+
+    sidebar.addEventListener('mouseleave', function () {
+        sidebar.classList.remove('show');
+    });
+</script>
 </body>
 </html>

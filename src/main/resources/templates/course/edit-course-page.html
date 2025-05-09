@@ -11,6 +11,8 @@
 <body>
 <div th:replace="fragments/navbar :: navbar"></div>
 
+<div th:replace="fragments/sidebar :: sidebar"></div>
+
 <div class="container my-5">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -50,5 +52,18 @@
         </div>
     </form>
 </div>
+
+<script>
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('sidebar-toggle');
+
+    toggleBtn.addEventListener('click', function () {
+        sidebar.classList.add('show');
+    });
+
+    sidebar.addEventListener('mouseleave', function () {
+        sidebar.classList.remove('show');
+    });
+</script>
 </body>
 </html>

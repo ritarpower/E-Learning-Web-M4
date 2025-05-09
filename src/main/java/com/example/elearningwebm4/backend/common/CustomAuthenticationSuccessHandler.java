@@ -19,7 +19,6 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String targetUrl = (String) request.getSession().getAttribute("REDIRECT_URL");
         request.getSession().removeAttribute("REDIRECT_URL");
 
-
         if (targetUrl == null || targetUrl.isEmpty() || targetUrl.contains("favicon.ico") ||  targetUrl.contains("error")) {
             targetUrl = "/";  // Default URL
         }

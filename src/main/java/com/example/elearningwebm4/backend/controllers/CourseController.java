@@ -4,12 +4,18 @@ package com.example.elearningwebm4.backend.controllers;
 import com.example.elearningwebm4.backend.dto.CourseEditDto;
 import com.example.elearningwebm4.backend.dto.CoursesDto;
 import com.example.elearningwebm4.backend.models.Courses;
+import com.example.elearningwebm4.backend.models.Enrollments;
+import com.example.elearningwebm4.backend.models.Users;
 import com.example.elearningwebm4.backend.services.CoursesService;
+import com.example.elearningwebm4.backend.services.EnrollmentsService;
+import com.example.elearningwebm4.backend.services.UsersService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +25,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/")
 public class CourseController {
+    @Autowired
+    private UsersService usersService;
+
+    @Autowired
+    private EnrollmentsService enrollmentsService;
+
     @Autowired
     private CoursesService coursesService;
 
@@ -47,9 +59,24 @@ public class CourseController {
         return "course/edit-course-page";
     }
 
+    @GetMapping("user/my-course")
+    public String showMyCourses(@RequestParam(name = "page", required = false, defaultValue = "0") int page,
+                                Model model) {
+        Pageable pageable = PageRequest.of(page, 6);
+
+//        chưa xử lý logic ở đay
+        return "course/my-course";
+    }
+
     @GetMapping("show-course-detail/{id}")
-    public String showCourseDetailPage(@PathVariable(name = "id") Long id, Model model) {
+    public String showCourseDetailPage(@PathVariable(name = "id") Long id, Model model,
+                                       @AuthenticationPrincipal UserDetails userDetails) {
         Courses courses = coursesService.findCoursesById(id);
+        Users user = usersService.findByEmail(userDetails.getUsername());
+        Enrollments enrollments = enrollmentsService.getEnrollment(user.getUserId(),id);
+        if(enrollments != null) {
+            model.addAttribute("enrollments", enrollments);
+        }
         model.addAttribute("courses", courses);
         return "course/course-detail";
     }
@@ -93,7 +120,7 @@ public class CourseController {
         return "redirect:/";
     }
 
-    @GetMapping("/search")
+    @GetMapping("/search-course")
     public String searchCourses(@RequestParam(name = "search") String title,
                                 @RequestParam(name = "page", required = false, defaultValue = "0") int page,
                                 Model model) {

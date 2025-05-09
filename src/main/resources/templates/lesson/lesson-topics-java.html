@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách Bài học</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+        main {
+            flex: 1;
+        }
+        .list-group-item a {
+            display: block;
+            width: 100%;
+            color: inherit;
+            text-decoration: none;
+        }
+        .list-group-item:hover {
+            background-color: #f0f0f0;
+        }
+        .full-width-footer {
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            background-color: #f8f9fa;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<!-- Nội dung chính -->
+<main class="container my-5">
+
+    <h1 class="text-center mb-4">Danh sách Bài học JAVA</h1>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}">Chi tiết bài học</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Danh sách bài học</li>
+        </ol>
+    </nav>
+
+    <ul class="list-group shadow-sm">
+        <li class="list-group-item" th:each="lesson : ${lessons}">
+            <a th:href="@{'/lessons/lesson-detail/' + ${lesson.lessonId}}"
+               th:text="${lesson.title}">
+            </a>
+        </li>
+        <li class="list-group-item">
+            <a>
+                quiz <!--quiz của hiển ở đây-->
+            </a>
+        </li>
+    </ul>
+
+</main>
+
+<!-- Footer -->
+<div class="full-width-footer" th:replace="fragments/footer :: site-footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

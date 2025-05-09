@@ -40,7 +40,6 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
             admin.setName("admin");
             admin.setEmail("admin@gmail.com");
             admin.setStatus(true);
-            admin.setCreateAt(LocalDateTime.now());
             // mã hóa mật khẩu
             admin.setPassword(EncryptPasswordUtils.EncryptPasswordUtils("123456"));
             List<Role> roles = new ArrayList<>();
@@ -56,7 +55,19 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
             user.setName("member");
             user.setEmail("member@gmail.com");
             user.setStatus(true);
-            user.setCreateAt(LocalDateTime.now());
+            // mã hóa mật khẩu
+            user.setPassword(EncryptPasswordUtils.EncryptPasswordUtils("123456"));
+            List<Role> roles = new ArrayList<>();
+            roles.add(IRoleRepository.findByName("ROLE_USER"));
+            user.setRoles(roles);
+            accountRepository.save(user);
+        }
+
+        if (accountRepository.findByEmail("minhphuc@gmail.com") == null) {
+            Users user = new Users();
+            user.setName("minhphuc");
+            user.setEmail("minhphuc@gmail.com");
+            user.setStatus(true);
             // mã hóa mật khẩu
             user.setPassword(EncryptPasswordUtils.EncryptPasswordUtils("123456"));
             List<Role> roles = new ArrayList<>();

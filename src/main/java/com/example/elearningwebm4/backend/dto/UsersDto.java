@@ -13,8 +13,8 @@ public class UsersDto {
     private Long userId;
     private String name;
     private String email;
+    private String oldPassword;
     private String password;
-    private String role;
-    private boolean status;
+    private String confirmPassword;
     private LocalDateTime createAt;
 }

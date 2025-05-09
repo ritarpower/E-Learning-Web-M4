@@ -2,6 +2,7 @@ package com.example.elearningwebm4.backend.configuration;
 
 import com.example.elearningwebm4.backend.common.CustomAuthenticationEntryPoint;
 import com.example.elearningwebm4.backend.common.CustomAuthenticationSuccessHandler;
+import com.example.elearningwebm4.backend.services.serviceimpl.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
@@ -32,10 +35,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .userDetailsService(customUserDetailsService)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/","/css/**", "/js/**", "/images/**","/search", "/login","/registration","/show-course-detail/**","/cart/**").permitAll() // Các đường dẫn không cần login
+                        .requestMatchers("/","/css/**", "/js/**", "/images/**","/search", "/login","/registration/**","/show-course-detail/**").permitAll() // Các đường dẫn không cần login
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Yêu cầu role ADMIN
-                        .requestMatchers("/user/**").hasRole("USER") // Yêu cầu Role USER
+                        .requestMatchers("/user/**").hasRole("USER")// Yêu cầu Role USER
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

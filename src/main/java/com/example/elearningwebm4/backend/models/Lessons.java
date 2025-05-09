@@ -22,10 +22,14 @@ public class Lessons {
     @ManyToOne
     private Courses course;
 
+    @Column(name = "topic_name", length = 255)
+    private String topicName;
+
     @Column(name = "title", nullable = false, length = 255)
     private String title;
 
-    @Column(name = "content", nullable = false, length = 255)
+    @Lob
+    @Column(name = "content", nullable = false, columnDefinition = "LONGTEXT")
     private String content;
 
     @Column(name = "video_url", nullable = false, length = 255)
