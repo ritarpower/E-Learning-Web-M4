@@ -16,4 +16,3 @@ public class CertificatesDto {
     private LocalDateTime issueDate;
     private String certificateUrl;
 }
-

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CartItemService {
     void addCourseToCart(Long cartId, Long courseId);
-    void removeCartItem(Long cartId, Long courseId);
+    void removeCartItem(Long cartItemId);
 }

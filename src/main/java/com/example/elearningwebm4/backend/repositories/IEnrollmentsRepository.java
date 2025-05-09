@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IEnrollmentsRepository extends JpaRepository<Enrollments, Long> {
     boolean existsByCourseAndUser(Courses courses, Users users);
+    Enrollments findByUserAndCourse(Users user, Courses course);
 }

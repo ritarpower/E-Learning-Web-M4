@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="'Bài ' + ${currentLessonId} + ': ' + ${lesson.title}">Chi tiết bài học</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    pre code {
+      display: block;
+      background-color: #2d2d2d;
+      color: #ccc;
+      padding: 1rem;
+      border-radius: 10px;
+      overflow-x: auto;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95rem;
+    }
+    pre code .keyword { color: #c792ea; }
+    pre code .class-name { color: #82aaff; }
+    pre code .string { color: #ecc48d; }
+    pre code .number { color: #f78c6c; }
+    pre code .method { color: #7fdbca; }
+    pre code .comment { color: #6a9955; font-style: italic; }
+
+    /* Footer full width */
+    .full-width-footer {
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      background-color: #f8f9fa; /* màu nền nhẹ */
+      padding: 20px 0;
+    }
+  </style>
+</head>
+<body style="padding-top: 70px;">
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container my-5">
+
+  <h1 class="text-center mb-4" th:text="${lesson.title}">Tiêu đề bài học</h1>
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a th:href="@{/}">Danh sách khóa học</a></li>
+      <li class="breadcrumb-item"><a th:href="@{/show-course-detail/1}">Chi tiết khóa học</a></li>
+      <li class="breadcrumb-item"><a th:href="@{/lessons/topics/1}">Danh sách bài học</a></li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <div th:text="${lesson.title}"> Tiêu đề </div>
+      </li>
+    </ol>
+  </nav>
+
+  <div class="mb-3">
+    <div th:utext="${lesson.content}">Nội dung bài học ở đây</div>
+  </div>
+
+  <div class="mb-3">
+    <strong>Video bài học:</strong><br>
+    <a th:href="${lesson.videoUrl}" target="_blank" th:text="${lesson.videoUrl}"></a>
+  </div>
+
+  <div class="d-flex justify-content-between mb-3">
+    <a class="btn btn-outline-secondary"
+       th:if="${currentLessonId > 1}"
+       th:href="@{/lessons/lesson-detail/{id}(id=${currentLessonId - 1})}">← Bài trước</a>
+
+    <a class="btn btn-outline-secondary ms-auto"
+       th:if="${currentLessonId < 6}"
+       th:href="@{/lessons/lesson-detail/{id}(id=${currentLessonId + 1})}">Bài tiếp theo →</a>
+  </div>
+
+  <br>
+  <a class="btn btn-primary" th:href="@{/lessons/topics}">← Quay lại danh sách bài học</a>
+
+</div>
+
+<div class="full-width-footer" th:replace="fragments/footer :: site-footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
