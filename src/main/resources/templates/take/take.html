@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Làm Bài Kiểm Tra</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    h2 {
+      color: #2c3e50;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+    }
+
+    .quiz-container {
+      background-color: white;
+      border-radius: 8px;
+      padding: 25px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .question {
+      margin-bottom: 25px;
+      padding: 15px;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      border-left: 4px solid #3498db;
+    }
+
+    h3 {
+      color: #2c3e50;
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .options {
+      margin-left: 10px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    label:hover {
+      background-color: #e8f4fc;
+    }
+
+    input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    button[type="submit"] {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #2980b9;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      color: #3498db;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: #2980b9;
+      text-decoration: underline;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      text-align: center;
+      padding: 15px;
+      background-color: #fdecea;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="quiz-container">
+  <div th:if="${quiz != null}">
+    <h2>Làm Bài Kiểm Tra: <span th:text="${quiz.title}">Quiz Title</span></h2>
+  </div>
+  <div th:unless="${quiz != null}" class="error-message">
+    <p>Không tìm thấy bài kiểm tra.</p>
+  </div>
+
+  <form th:if="${questions != null and submission != null}"
+        th:action="@{/take-quiz/submit/{quizId}(quizId=${quiz.quizId})}"
+        th:object="${submission}"
+        method="post">
+    <div th:each="question, iter : ${questions}" class="question">
+      <h3>Câu <span th:text="${iter.index + 1}"></span>: <span th:text="${question.content}">Question Content</span></h3>
+      <div class="options">
+        <label>
+          <input type="radio" th:field="*{answers[__${question.questionId}__]}" value="A" required>
+          <span th:text="${question.optionA}">Option A</span>
+        </label>
+        <label>
+          <input type="radio" th:field="*{answers[__${question.questionId}__]}" value="B">
+          <span th:text="${question.optionB}">Option B</span>
+        </label>
+        <label>
+          <input type="radio" th:field="*{answers[__${question.questionId}__]}" value="C">
+          <span th:text="${question.optionC}">Option C</span>
+        </label>
+        <label>
+          <input type="radio" th:field="*{answers[__${question.questionId}__]}" value="D">
+          <span th:text="${question.optionD}">Option D</span>
+        </label>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 30px;">
+      <button type="submit">Nộp Bài</button>
+    </div>
+  </form>
+
+  <a th:href="@{/}" class="back-link">← Quay Lại Danh Sách</a>
+</div>
+</body>
+</html>

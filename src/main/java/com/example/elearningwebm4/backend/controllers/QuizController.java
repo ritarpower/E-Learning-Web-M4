@@ -59,3 +59,4 @@ public class QuizController {
         return "redirect:/quizzes";
     }
 }
+

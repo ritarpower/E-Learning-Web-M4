@@ -56,10 +56,12 @@
                th:text="${lesson.title}">
             </a>
         </li>
+        </li>
         <li class="list-group-item">
-            <a>
-                quiz <!--                quiz của hiển ở đây-->
-            </a>
+            <a th:href="@{/take-quiz/2}">Làm bài thi</a>
+        </li>
+        <li class="list-group-item">
+            <a th:href="@{/take-quiz/history/2}">Xem lịch sử</a>
         </li>
     </ul>
 
