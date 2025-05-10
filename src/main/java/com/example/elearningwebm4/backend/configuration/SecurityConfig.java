@@ -37,7 +37,7 @@ public class SecurityConfig {
         http
                 .userDetailsService(customUserDetailsService)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/","/css/**", "/js/**", "/images/**","/search", "/login","/registration/**","/show-course-detail/**").permitAll() // Các đường dẫn không cần login
+                        .requestMatchers("/","/css/**", "/js/**", "/images/**","/search-course", "/login","/registration/**","/show-course-detail/**").permitAll() // Các đường dẫn không cần login
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Yêu cầu role ADMIN
                         .requestMatchers("/user/**").hasRole("USER")// Yêu cầu Role USER
                         .anyRequest().authenticated()

@@ -37,8 +37,8 @@ public class RegistrationController {
 
     @PostMapping("/regis")
     public String registrationSubmit(@ModelAttribute("userDto") UsersDto userDto,
-                                     RedirectAttributes redirectAttributes,
-                                     BindingResult bindingResult) {
+                                     BindingResult bindingResult,
+                                     RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "security/registration";
         }

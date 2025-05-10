@@ -22,22 +22,25 @@
             >
                 <div class="mb-3">
                     <label for="name" class="form-label">Họ và tên</label>
-                    <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Nhập họ và tên">
+                    <input type="text" th:field="*{name}" class="form-control" id="name" required minlength="5" maxlength="20" placeholder="Nhập họ và tên">
+                    <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
                 </div>
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" th:field="*{email}" class="form-control" id="email" placeholder="Nhập địa chỉ email">
+                    <input type="email" th:field="*{email}" class="form-control" id="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$" placeholder="Nhập địa chỉ email">
+                    <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                 </div>
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Mật khẩu</label>
-                    <input type="password" th:field="*{password}" class="form-control" id="password" placeholder="Nhập mật khẩu">
+                    <input type="password" th:field="*{password}" class="form-control" id="password" required placeholder="Nhập mật khẩu">
+                    <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                 </div>
 
                 <div class="mb-3">
                     <label for="confirmPassword" class="form-label">Nhập lại mật khẩu</label>
-                    <input type="password" th:field="*{confirmPassword}" class="form-control" id="confirmPassword" placeholder="Xác nhận mật khẩu">
+                    <input type="password" th:field="*{confirmPassword}" class="form-control" id="confirmPassword" required placeholder="Xác nhận mật khẩu">
                 </div>
 
                 <button type="submit" class="btn btn-success">Đăng ký</button>
