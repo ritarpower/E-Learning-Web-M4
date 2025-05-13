@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 public class CoursesServiceImpl implements CoursesService {
@@ -37,5 +39,9 @@ public class CoursesServiceImpl implements CoursesService {
     @Override
     public void deleteCoursesById(Long id) {
         coursesRepository.deleteById(id);
+    }
+
+    public Optional<Courses> findById(Long courseId) {
+        return coursesRepository.findById(courseId);
     }
 }
